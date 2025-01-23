@@ -9,10 +9,10 @@ This project allows you to forward Ring Doorbell calls to SIP and vice versa. It
 
 # Why?
 The Ring App works fine for families, but not for businesses: 
-- Not another App at the workplace!
-- Ring doesn't support SSO. I don't want to manually maintain a walled-off user database.
 - Off-duty staff shouldn't be bothered with Ring Alerts.
 - My PBX has so many features that can be useful for a Doorbell as well: routing/hunt groups, time-based announcements and more.
+- Ring doesn't support SSO. I don't want to manually maintain a walled-off user database.
+- Not another App at the workplace!
 
 ## Prerequisites
 
