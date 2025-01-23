@@ -1,11 +1,11 @@
 # Ring2SIP: Forward Ring Doorbell Calls to SIP and Vice Versa
 
-This project allows you to forward Ring Doorbell calls to a SIP extension and vice versa. It has been tested with the [Ring Video Doorbell 4](https://ring.com/support/products/doorbells/video-doorbell-4) and Asterisk PBX systems.
+This project allows you to forward Ring Doorbell calls to SIP and vice versa. It has been tested with the [Ring Video Doorbell 4](https://ring.com/support/products/doorbells/video-doorbell-4) and Asterisk PBX.
 
 ## Features
 
 - **Ring-to-SIP**: Forward incoming Ring Doorbell calls (button press) to a specified SIP extension or ring group.
-- **SIP-to-Ring**: Your SIP extensions can initiate calls to the Ring Doorbell
+- **SIP-to-Ring**: Your SIP extensions can initiate calls to the Ring Doorbell.
 
 ## Prerequisites
 
@@ -15,7 +15,7 @@ This project allows you to forward Ring Doorbell calls to a SIP extension and vi
 
 ## Setup
 
-- Clone this repository and install dependencies: `git clone <repo-url> && cd <repo-folder> && npm install`.
+- Clone this repository and install dependencies: `git clone https://github.com/fsalomon/ring2sip && cd ring2sip && npm install`.
 - Copy the example environment file and configure it: `cp .env.example .env`.
 
 ### Setting up `.env`
@@ -34,7 +34,7 @@ This project allows you to forward Ring Doorbell calls to a SIP extension and vi
 - Test SIP originated call. Call your `SIP_USER` from any extension.
 
 ### Running as a Daemon
-Use `supervisord` or a similar tool to keep the process running. Note: the process will exit after each call because I'm lazy.
+Use `supervisord` or a similar tool to keep the process running. Note: the process will exit after each call because I'm lazy. If you want to map multiple cameras you will have to run multiple processes.
 
 ---
 
