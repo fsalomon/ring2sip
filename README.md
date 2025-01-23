@@ -2,6 +2,9 @@
 
 This project allows you to forward Ring Doorbell calls to SIP and vice versa. It has been tested with the [Ring Video Doorbell 4](https://ring.com/support/products/doorbells/video-doorbell-4) and Asterisk PBX.
 
+# Why?
+The Ring App works fine for families, but not for businesses: Ring doesn't support SSO. Off-duty staff shouldn't be bothered with business Ring Calls.
+
 ## Features
 
 - **Ring-to-SIP**: Forward incoming Ring Doorbell calls (button press) to a specified SIP extension or ring group.
