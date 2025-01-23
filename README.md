@@ -4,7 +4,7 @@ This project allows you to forward Ring Doorbell calls to SIP and vice versa. It
 
 # Why?
 The Ring App works fine for families, but not for businesses: 
-- Not another app at the workplace!
+- Not another App at the workplace!
 - Ring doesn't support SSO. I don't want to manually maintain a walled-off user database.
 - Off-duty staff shouldn't be bothered with Ring Alerts.
 - My PBX has so many features that can be useful for a Doorbell as well: routing/hunt groups, time-based announcements and more.
@@ -51,10 +51,10 @@ Use `supervisord` or a similar tool to keep the process running. Note: the proce
 ## Limitations
 
 - **No Video**: Currently, only audio is supported as my SIP phones don't not support video. Adding video support should be straightforward.
-- **No PCMA**: The implementation only supports Opus codec since that's what my Ring Video Doorbell 4 uses.
-- **No NAT**: This tool must be running on the same private network (or the same machine) as your PBX. VPN works.
+- **No PCMU**: My implementation only supports Opus codec since that's what my Ring Video Doorbell 4 uses. Some (older?) Ring Doorbells seem to use PCMU. If you want support for that, please DIY.
+- **No NAT**: This tool must be running on the same private network (or the same machine) as your PBX. VPN works. If you need NAT support, please DIY.
 - **No Cloud PBX**: See "No NAT"
-- **No Security**: Do not expose this tool to the internet or you will get ghost calls or worse. You have been warned!
+- **No Security**: Server INVITES are not authenticated. Do not expose this tool to the internet or you will get ghost calls or worse. You have been warned!
 - **No Session Timer**: Most PBX use 30 mins, that should be enough for a doorbell :-)
 
 ---
