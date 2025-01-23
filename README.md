@@ -12,14 +12,14 @@ The Ring App works fine for families, but not for businesses: Ring doesn't suppo
 
 ## Prerequisites
 
-1. **Linux System**: Requires a Linux machine with Node.js and FFmpeg installed
+1. **Node**: Requires a machine with Node.js and FFmpeg installed. Tested with Debian Linux.
 2. **Networking** The machine running this code and your PBX must be located on the same private network.
-2. **OPUS Codec**: Ensure your PBX supports the Opus for audio. Ensure your Ring camera is using Opus.
+2. **OPUS Codec**: Ensure your PBX supports Opus audio. Ensure your Ring camera is using Opus.
 
 ## Setup
 
 - Clone this repository and install dependencies: `git clone https://github.com/fsalomon/ring2sip && cd ring2sip && npm install`.
-- Copy the example environment file and configure it: `cp .env.example .env`.
+- Copy the example environment file and edit it: `cp .env.example .env`.
 
 ### Setting up `.env`
 - Obtain your `REFRESH_TOKEN` using [ring-auth-cli](https://github.com/dgreif/ring/wiki/Refresh-Tokens).
@@ -27,14 +27,14 @@ The Ring App works fine for families, but not for businesses: Ring doesn't suppo
   - `SIP_DOMAIN`, `SIP_PORT`, `SIP_USER`, `SIP_PASS`.
 - Choose an extension or ring group on your PBX to forward Ring calls to and set it as `SIP_DEST`.
 - Specify your `CAMERA_NAME`. It must be unique across locations (or you will need to modify my code).
-- Configure your local network settings:
+- Configure your local machine settings:
   - `LOCAL_IP` (must be static, or you will need to modify my code).
   - `LOCAL_SIP_PORT`, `LOCAL_RTP_PORT` (use any free ports).
 
 ### Testing
 - Run the code: `node index.js`. Uncomment `doConnect()` in `index.js` to establish a connection without a trigger.
-- Test Ring originated call. If you don't get the button press event, your refresh token might be broken. Check `DEBUG=ring node index.js` and read the [Wiki Article](https://github.com/dgreif/ring/wiki/Refresh-Tokens).
-- Test SIP originated call. Call your `SIP_USER` from any extension.
+- Test Ring originated call: If you don't get the `buttonPressed` event, your refresh token might be broken. Check `DEBUG=ring node index.js` and read the [Wiki Article](https://github.com/dgreif/ring/wiki/Refresh-Tokens).
+- Test SIP originated call: Call your `SIP_USER` from any extension. If you don't get the `inboundCall` event, check if your `SIP_USER` is registering correctly.
 
 ### Running as a Daemon
 Use `supervisord` or a similar tool to keep the process running. Note: the process will exit after each call because I'm lazy. If you want to map multiple cameras you will have to run multiple processes.
@@ -48,6 +48,7 @@ Use `supervisord` or a similar tool to keep the process running. Note: the proce
 - **No NAT**: This tool must be running on the same private network (or the same machine) as your PBX. VPN works.
 - **No Cloud PBX**: See "No NAT"
 - **No Security**: Do not expose this tool to the internet or you will get ghost calls or worse. You have been warned!
+- **No Session Timer**: Most PBX use 30 mins, that should be enough for a doorbell :-)
 
 ---
 
