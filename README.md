@@ -17,7 +17,7 @@ The Ring App works fine for families, but not for businesses:
 ## Prerequisites
 
 1. **Node**: Requires a machine with Node.js and FFmpeg installed. Tested with Debian Linux.
-2. **Networking** The machine running this code and your PBX must be located on the same private network.
+2. **Networking** The machine running this code and your PBX must be located on the same private network. Your Ring Doorbell can be on a completely different network.
 2. **OPUS Codec**: Ensure your PBX supports Opus audio. Ensure your Ring camera is using Opus.
 
 ## Setup
