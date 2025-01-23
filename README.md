@@ -53,7 +53,7 @@ Use `supervisord` or a similar tool to keep the process running. Note: the proce
 - **No Video**: Currently, only audio is supported as my SIP phones don't not support video. Adding video support should be straightforward.
 - **No PCMU**: My implementation only supports Opus codec since that's what my Ring Video Doorbell 4 uses. Some (older?) Ring Doorbells seem to use PCMU. If you want support for that, please DIY.
 - **No NAT**: This tool must be running on the same private network (or the same machine) as your PBX. VPN works. If you need NAT support, please DIY.
-- **No Cloud PBX**: See "No NAT"
+- **No Cloud PBX**: See "No NAT". If you can VPN into your Cloud PBX, it should be okay but see "No Security".
 - **No Security**: Server `INVITE`s are not authenticated. *Do not expose this tool to the internet* or you will get ghost calls or worse. You have been warned!
 - **No Session Timer**: `Session-Expires` headers are ignored. Re-`INVITE` is not implemented. Most PBX use 30 mins, that should be enough for a doorbell :-)
 
