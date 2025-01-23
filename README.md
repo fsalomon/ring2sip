@@ -30,7 +30,7 @@ This project allows you to forward Ring Doorbell calls to SIP and vice versa. It
 
 ### Testing
 - Run the code: `node index.js`. Uncomment `doConnect()` in `index.js` to establish a connection without a trigger.
-- Test Ring originated call. If you don't get the button press event, you refresh token might be broken. Check `DEBUG=ring node index.js`
+- Test Ring originated call. If you don't get the button press event, your refresh token might be broken. Check `DEBUG=ring node index.js` and read the [Wiki Article](https://github.com/dgreif/ring/wiki/Refresh-Tokens).
 - Test SIP originated call. Call your `SIP_USER` from any extension.
 
 ### Running as a Daemon
