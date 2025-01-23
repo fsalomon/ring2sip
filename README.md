@@ -1,6 +1,6 @@
 # Ring2SIP: Forward Ring Doorbell Calls to SIP and Vice Versa
 
-This project allows you to forward Ring Doorbell calls to SIP and vice versa. It has been tested with the [Ring Video Doorbell 4](https://ring.com/support/products/doorbells/video-doorbell-4) and Asterisk PBX.
+This project allows you to forward Ring Doorbell calls to SIP and vice versa. It has been tested with the [Ring Video Doorbell 4](https://ring.com/support/products/doorbells/video-doorbell-4) and Asterisk PBX and chan_pjsip.
 
 # Why?
 The Ring App works fine for families, but not for businesses: 
@@ -27,7 +27,10 @@ The Ring App works fine for families, but not for businesses:
 ### Setting up `.env`
 - Obtain your `REFRESH_TOKEN` using [ring-auth-cli](https://github.com/dgreif/ring/wiki/Refresh-Tokens).
 - Create a new extension on your PBX and set these variables:
-  - `SIP_DOMAIN`, `SIP_PORT`, `SIP_USER`, `SIP_PASS`.
+  - `SIP_DOMAIN` the IP address of your PBX
+  - `SIP_PORT` the SIP port of your PBX (probably 5060)
+  - `SIP_USER` your new user, probably the extension number
+  - `SIP_PASS` a very secure password
 - Choose an extension or ring group on your PBX to forward Ring calls to and set it as `SIP_DEST`.
 - Specify your `CAMERA_NAME`. It must be unique across locations (or you will need to modify my code).
 - Configure your local machine settings:
