@@ -37,6 +37,7 @@ The Ring App works fine for families, but not for businesses:
 - Configure your local machine settings:
   - `LOCAL_IP` (must be static, or you will need to modify my code).
   - `LOCAL_SIP_PORT`, `LOCAL_RTP_PORT` (use any free ports).
+- Optionally, set `NOTIFY_URL` if you want a URL to be called for every button press on your doorbell.
 
 ### Testing
 - Run the code: `node index.js`. Uncomment `doConnect()` in `index.js` to establish a connection without a trigger.
