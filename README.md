@@ -51,6 +51,7 @@ Use `supervisord` or a similar tool to keep the process running. Note: the proce
 ## Docker
 
 Setup:
+- `git clone https://github.com/fsalomon/ring2sip && cd ring2sip`
 - `docker build -t ring2sip .`
 - `docker run --network host --name ring2sip -d ring2sip`
 - `docker exec -it ring2sip npx -p ring-client-api ring-auth-cli`
