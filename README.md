@@ -38,6 +38,22 @@ Use `supervisord` or a similar tool to keep the process running. Note: the proce
 
 ---
 
+## Docker
+
+Setup:
+- `docker build -t ring2sip .`
+- `docker run --network host --name ring2sip -d ring2sip`
+- `docker exec -it ring2sip npx -p ring-client-api ring-auth-cli`
+- `docker cp .env ring2sip:/app/.env`
+- `docker restart ring2sip`
+
+Useful commands:
+- `docker logs ring2sip`
+- `docker exec ring2sip supervisorctl status`
+- `docker exec -it ring2sip tail -n 100 -f /var/log/nodeapp.log`
+
+---
+
 ## Limitations
 
 - **No Video**: Currently, only audio is supported as my SIP phones don't not support video. Adding video support should be straightforward.
