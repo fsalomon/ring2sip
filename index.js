@@ -3,6 +3,8 @@ import { sip } from './sip.js'
 import { ring } from './ring.js'
 import { tones } from './tones.js'
 
+const { NOTIFY_URL } = process.env;
+
 // Initialize
 Promise.all([
     sip.initialize(),
@@ -57,6 +59,7 @@ Promise.all([
 
     ring.on('buttonPressed', (camera) => {
       console.log(`INDEX - Button pressed for ${camera.name}`)
+      notify()
       doConnect()
     })
 
@@ -93,4 +96,15 @@ function doConnect(camera) {
         console.error('INDEX - Error initiating calls:', err)
         fullCleanup()
       })
+}
+
+function notify() {
+    if (NOTIFY_URL && NOTIFY_URL.startsWith('http')) {
+      fetch(NOTIFY_URL)
+        .then(response => response.text())
+        .then(data => console.log('INDEX - Notification sent successfully:', data))
+        .catch(error => console.error('INDEX - Error sending notification:', error));
+    } else {
+      console.log('INDEX - NOTIFY_URL is not set or invalid.');
+    }
 }
