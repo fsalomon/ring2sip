@@ -5,11 +5,9 @@ import { tones } from './tones.js'
 import { startHealthServer } from './health.js';
 
 const NOTIFY_URL = process.env;
-const HEALTH_PORT = 3000;
 let appState = 'starting';
 
 const health = startHealthServer({
-  port: HEALTH_PORT,
   getState: () => appState
 });
 

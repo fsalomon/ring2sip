@@ -1,8 +1,11 @@
 import http from 'node:http';
 import { ring } from './ring.js'
 
+const {
+  HEALTH_PORT
+} = process.env
+
 export function startHealthServer({
-  port = 3000,
   getState
 }) {
   if (typeof getState !== 'function') {
@@ -36,8 +39,8 @@ export function startHealthServer({
     res.end();
   });
 
-  server.listen(port, '0.0.0.0', () => {
-    console.log(`HEALTH - Listening on http://0.0.0.0:${port}/health`);
+  server.listen(HEALTH_PORT, '127.0.0.1', () => {
+    console.log(`HEALTH - Listening on http://127.0.0.1:${HEALTH_PORT}/health`);
   });
 
   return {
