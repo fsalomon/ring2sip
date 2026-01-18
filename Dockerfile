@@ -2,7 +2,7 @@
 FROM node:22
 
 # Install FFmpeg and Supervisor
-RUN apt-get update && apt-get install -y ffmpeg supervisor && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y ffmpeg supervisor curl && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -22,6 +22,9 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 EXPOSE 5080/udp 8000/udp
 
 # Start Supervisord
-CMD mkdir -p /var/run
-CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+CMD ["sh", "-c", "mkdir -p /var/run && supervisord -c /etc/supervisor/conf.d/supervisord.conf"]
 
+EXPOSE 3000
+
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:3000/health || exit 1

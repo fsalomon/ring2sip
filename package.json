@@ -1,11 +1,11 @@
 {
   "type": "module",
   "dependencies": {
+    "@homebridge/camera-utils": "^3.0.0",
     "dotenv": "^16.4.7",
     "fs": "^0.0.1-security",
-    "ring-client-api": "^13.2.1",
+    "ring-client-api": "^14.2.0",
     "sip": "^0.0.6",
-    "werift": "^0.21.12",
-    "@homebridge/camera-utils": "^3.0.0"
+    "werift": "^0.21.12"
   }
 }

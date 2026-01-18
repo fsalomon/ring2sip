@@ -2,8 +2,16 @@ import 'dotenv/config'
 import { sip } from './sip.js'
 import { ring } from './ring.js'
 import { tones } from './tones.js'
+import { startHealthServer } from './health.js';
 
-const { NOTIFY_URL } = process.env;
+const NOTIFY_URL = process.env;
+const HEALTH_PORT = 3000;
+let appState = 'starting';
+
+const health = startHealthServer({
+  port: HEALTH_PORT,
+  getState: () => appState
+});
 
 // Initialize
 Promise.all([
@@ -65,6 +73,7 @@ Promise.all([
 
     sip.register()
     ring.listen()
+    appState = 'ok';
     //doConnect() // for testing purposes
 })
 
@@ -74,13 +83,22 @@ process.on('SIGINT', () => {
 })
 
 // Functions
-function fullCleanup() {
-  sip.cleanup()
-  ring.cleanup()
+async function fullCleanup() {
+  appState = 'shutting_down';
+
+  sip.cleanup();
+  ring.cleanup();
   tones.cleanup();
+
+  try {
+    await health.close();
+    console.log('INDEX - Health server closed.');
+  } catch (err) {
+    console.error('INDEX - Error closing health server:', err);
+  }
+
   setTimeout(() => {
-    // give sip some time to cleanup
-    process.exit(0)
+    process.exit(0);
   }, 200);
 }
 

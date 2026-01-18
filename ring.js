@@ -17,6 +17,7 @@ class Ring extends EventEmitter {
     this.initiatingCall = false
     this.receivingAudio = false
     this.rtpSequencer = new RtpSequencer()
+    this.battery = null
   }
 
   // 1) Initialize the Ring API
@@ -98,6 +99,10 @@ class Ring extends EventEmitter {
       console.log(`RING - Button pressed`)
       this.emit('buttonPressed', this.camera)
     });
+    this.camera.onData.subscribe((data) => {
+      this.battery = data.health.battery_percentage
+      console.log('RING - Battery', this.battery)
+    })
   }
   
   sendAudioPacket(rtp, isTone = false) {
@@ -113,6 +118,10 @@ class Ring extends EventEmitter {
   
   pipeAudio(sip) {
     this.sip = sip
+  }
+
+  getBattery() {
+    return this.battery
   }
 
   // 4) End the Ring call
