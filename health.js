@@ -30,8 +30,8 @@ export function startHealthServer() {
     res.end();
   });
 
-  server.listen(HEALTH_PORT, '127.0.0.1', () => {
-    console.log(`HEALTH - Listening on http://127.0.0.1:${HEALTH_PORT}/health`);
+  server.listen(HEALTH_PORT, '0.0.0.0', () => {
+    console.log(`HEALTH - Listening on http://0.0.0.0:${HEALTH_PORT}/health`);
   });
 
   return {
