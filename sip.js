@@ -224,19 +224,6 @@ class Sip extends EventEmitter {
         }
         sipLib.send(request)
       }
-
-      const request = {
-          method: 'BYE',
-          uri: response.headers.contact[0].uri,
-          headers: {
-            to: response.headers.to,
-            from: response.headers.from,
-            'call-id': response.headers['call-id'],
-            cseq: { method: 'BYE', seq: response.headers.cseq.seq + 1 },
-            via: response.headers.via
-          }
-      }
-      sipLib.send(request)
     } 
     // If we have an INVITE in progress, send CANCEL
     else if (this.inviteRequest) {
