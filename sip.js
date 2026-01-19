@@ -204,6 +204,27 @@ class Sip extends EventEmitter {
     if (this.sipSession && this.sipSession.headers) {
       console.log('SIP - Sending BYE to terminate call...')
       const response = this.sipSession
+      const byeUri =
+        response.headers?.contact?.[0]?.uri ||
+        response.headers?.to?.uri
+
+      if (!byeUri) {
+          console.log('SIP - No BYE target URI found (missing Contact/To). Skipping BYE.')
+      } else {
+        const request = {
+          method: 'BYE',
+          uri: byeUri,
+          headers: {
+            to: response.headers.to,
+            from: response.headers.from,
+            'call-id': response.headers['call-id'],
+            cseq: { method: 'BYE', seq: response.headers.cseq.seq + 1 },
+            via: response.headers.via
+          }
+        }
+        sipLib.send(request)
+      }
+
       const request = {
           method: 'BYE',
           uri: response.headers.contact[0].uri,
