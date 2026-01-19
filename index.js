@@ -4,12 +4,8 @@ import { ring } from './ring.js'
 import { tones } from './tones.js'
 import { startHealthServer } from './health.js';
 
-const NOTIFY_URL = process.env;
-let appState = 'starting';
-
-const health = startHealthServer({
-  getState: () => appState
-});
+const { NOTIFY_URL } = process.env;
+const health = startHealthServer();
 
 // Initialize
 Promise.all([
@@ -71,7 +67,6 @@ Promise.all([
 
     sip.register()
     ring.listen()
-    appState = 'ok';
     //doConnect() // for testing purposes
 })
 
@@ -82,8 +77,6 @@ process.on('SIGINT', () => {
 
 // Functions
 async function fullCleanup() {
-  appState = 'shutting_down';
-
   sip.cleanup();
   ring.cleanup();
   tones.cleanup();

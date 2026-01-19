@@ -18,6 +18,7 @@ class Ring extends EventEmitter {
     this.receivingAudio = false
     this.rtpSequencer = new RtpSequencer()
     this.battery = null
+    this.connected = false
   }
 
   // 1) Initialize the Ring API
@@ -101,6 +102,7 @@ class Ring extends EventEmitter {
     });
     this.camera.onData.subscribe((data) => {
       this.battery = data.health.battery_percentage
+      this.connected = data.health.connected
       console.log('RING - Battery', this.battery)
     })
   }
@@ -122,6 +124,10 @@ class Ring extends EventEmitter {
 
   getBattery() {
     return this.battery
+  }
+
+  isConnected() {
+    return this.connected
   }
 
   // 4) End the Ring call

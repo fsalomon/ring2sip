@@ -43,6 +43,8 @@ class Sip extends EventEmitter {
     this.registerInterval = null
     this.registerExpires = 600 // seconds (example)
     this.currentCallId = null  // track inbound calls or single call scenario
+
+    this.registered = false
   }
 
   //--------------------------------------------------------------------------
@@ -87,6 +89,18 @@ class Sip extends EventEmitter {
     }
 
     const sendRegister = (expires = this.registerExpires) => {
+      // pessimistic by default until we hear back
+      let replied = false
+
+      // small guard: if we never get a response, don't lie forever
+      const timeoutMs = 8000
+      const t = setTimeout(() => {
+        if (!replied) {
+          this.registered = false
+          this.emit('registrationChanged', this.registered)
+        }
+      }, timeoutMs)
+
       const callId = rstring()
       const registerRequest = {
         method: 'REGISTER',
@@ -110,20 +124,34 @@ class Sip extends EventEmitter {
       }
 
       sipLib.send(registerRequest, (response) => {
+        replied = true
+        clearTimeout(t)
+
         if (response.status === 401 && response.headers['www-authenticate']) {
           this._retryWithDigestAuth(
             registerRequest, 
             response,
             'SIP - REGISTER success (after auth).',
             'SIP - REGISTER failed:',
-            () => {}
+            (authResp) => {
+              const ok = authResp && authResp.status >= 200 && authResp.status < 300
+              const changed = this.registered !== ok
+              this.registered = ok
+              if (changed) this.emit('registrationChanged', this.registered)
+            }
           )
         }
         else if (response.status >= 200 && response.status < 300) {
           console.log('SIP - REGISTER success.')
+          const changed = this.registered !== true
+          this.registered = true
+          if (changed) this.emit('registrationChanged', this.registered)
         }
         else {
           console.error(`SIP - REGISTER failed: ${response.status} ${response.reason}`)
+          const changed = this.registered !== false
+          this.registered = false
+          if (changed) this.emit('registrationChanged', this.registered)
         }
       })
     }
@@ -135,6 +163,10 @@ class Sip extends EventEmitter {
     this.registerInterval = setInterval(() => {
       sendRegister(this.registerExpires)
     }, this.registerExpires * 1000)
+  }
+
+  isRegistered() {
+    return this.registered
   }
 
   initiateCall() {
@@ -207,6 +239,12 @@ class Sip extends EventEmitter {
     if (this.registerInterval) {
       clearInterval(this.registerInterval)
       this.registerInterval = null
+
+      // we are no longer "registered" from our app's POV
+      if (this.registered !== false) {
+        this.registered = false
+        this.emit('registrationChanged', this.registered)
+      }
 
       // Optional: Send a REGISTER to remove our contact
       const unregisterRequest = {

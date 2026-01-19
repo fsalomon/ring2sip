@@ -1,29 +1,20 @@
 import http from 'node:http';
+import { sip } from './sip.js'
 import { ring } from './ring.js'
 
 const {
   HEALTH_PORT
 } = process.env
 
-export function startHealthServer({
-  getState
-}) {
-  if (typeof getState !== 'function') {
-    throw new Error('health: getState() is required');
-  }
-
+export function startHealthServer() {
   const server = http.createServer((req, res) => {
     if (req.method === 'GET' && req.url === '/health') {
-      const state = getState();
-
-      const statusCode =
-        state === 'ok' ? 200 :
-        state === 'starting' ? 503 :
-        500;
+      const statusCode = ring.isConnected() && sip.isRegistered() ? 200 : 500;
 
       const body = JSON.stringify({
-        status: state,
         battery: ring.getBattery(),
+        ringConnected: ring.isConnected(),
+        sipRegistered: sip.isRegistered(),
         uptime: process.uptime(),
       });
 
