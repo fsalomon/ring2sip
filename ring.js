@@ -24,7 +24,7 @@ class Ring extends EventEmitter {
   // 1) Initialize the Ring API
   initialize() {
     const refreshToken = getRefreshTokenFromEnv()
-    this.ringApi = new RingApi({ refreshToken, debug: true })
+    this.ringApi = new RingApi({ refreshToken, cameraStatusPollingSeconds: 600, debug: true })
 
     this.ringApi.onRefreshTokenUpdated.subscribe(async ({ newRefreshToken }) => {
       console.log('RING - Refresh token updated')
