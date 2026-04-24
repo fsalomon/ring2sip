@@ -6,13 +6,17 @@ const {
   HEALTH_PORT
 } = process.env
 
+const BATTERY_UNHEALTHY_THRESHOLD = 15
+
 export function startHealthServer() {
   const server = http.createServer((req, res) => {
     if (req.method === 'GET' && req.url === '/health') {
-      const statusCode = ring.isConnected() && sip.isRegistered() ? 200 : 500;
+      const battery = ring.getBattery();
+      const batteryOk = battery === null || battery >= BATTERY_UNHEALTHY_THRESHOLD;
+      const statusCode = sip.isRegistered() && batteryOk ? 200 : 500;
 
       const body = JSON.stringify({
-        battery: ring.getBattery(),
+        battery,
         ringConnected: ring.isConnected(),
         sipRegistered: sip.isRegistered(),
         uptime: process.uptime(),
