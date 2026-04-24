@@ -13,7 +13,7 @@ export function startHealthServer() {
     if (req.method === 'GET' && req.url === '/health') {
       const battery = ring.getBattery();
       const batteryOk = battery === null || battery >= BATTERY_UNHEALTHY_THRESHOLD;
-      const statusCode = sip.isRegistered() && batteryOk ? 200 : 500;
+      const statusCode = ring.isConnected() && sip.isRegistered() && batteryOk ? 200 : 500;
 
       const body = JSON.stringify({
         battery,
