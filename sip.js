@@ -36,7 +36,7 @@ class Sip extends EventEmitter {
     this.serverRtpInfo = null
     this.udp = createSocket('udp4');
     this.udp.bind(LOCAL_RTP_PORT, LOCAL_IP, () => {
-      console.log(`SIP - RTP Socket bound to ${LOCAL_IP}:${LOCAL_RTP_PORT}`);
+      console.log(`SIP - RTP Socket bound to ${LOCAL_IP}:${this.udp.address().port}`);
     })
     this.rtpSequencer = new RtpSequencer()
 
@@ -539,7 +539,7 @@ class Sip extends EventEmitter {
       's=-',
       `c=IN IP4 ${LOCAL_IP}`,
       't=0 0',
-      'm=audio 8000 RTP/AVP 96',
+      `m=audio ${this.udp.address().port} RTP/AVP 96`,
       'a=rtpmap:96 OPUS/48000/2',
       'a=fmtp:96 useinbandfec=1;minptime=10',
       'a=ptime:20',
