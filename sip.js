@@ -35,8 +35,16 @@ class Sip extends EventEmitter {
     this.initiatingCall = false
     this.serverRtpInfo = null
     this.udp = createSocket('udp4');
-    this.udp.bind(LOCAL_RTP_PORT, LOCAL_IP, () => {
-      console.log(`SIP - RTP Socket bound to ${LOCAL_IP}:${LOCAL_RTP_PORT}`);
+    this.localRtpPort = null
+    this.rtpReady = new Promise((resolve, reject) => {
+      const onError = (error) => reject(error)
+      this.udp.once('error', onError)
+      this.udp.bind(LOCAL_RTP_PORT, LOCAL_IP, () => {
+        this.udp.off('error', onError)
+        const port = this.udp.address().port
+        console.log(`SIP - RTP Socket bound to ${LOCAL_IP}:${port}`);
+        resolve(port)
+      })
     })
     this.rtpSequencer = new RtpSequencer()
 
@@ -51,7 +59,10 @@ class Sip extends EventEmitter {
   // Public Methods
   //--------------------------------------------------------------------------
 
-  initialize(debug = false) {
+  async initialize(debug = false) {
+    if (this.isSipStackStarted) return
+
+    this.localRtpPort = await this.rtpReady
     if (this.isSipStackStarted) return
 
     sipLib.start({
@@ -533,13 +544,17 @@ class Sip extends EventEmitter {
   }
 
   _buildLocalSdp(sessionId) {
+    if (this.localRtpPort === null) {
+      throw new Error('SIP - RTP socket is not bound')
+    }
+
     return [
       'v=0',
       `o=- ${sessionId} ${sessionId} IN IP4 ${LOCAL_IP}`,
       's=-',
       `c=IN IP4 ${LOCAL_IP}`,
       't=0 0',
-      'm=audio 8000 RTP/AVP 96',
+      `m=audio ${this.localRtpPort} RTP/AVP 96`,
       'a=rtpmap:96 OPUS/48000/2',
       'a=fmtp:96 useinbandfec=1;minptime=10',
       'a=ptime:20',
@@ -552,4 +567,3 @@ class Sip extends EventEmitter {
 }
 
 export const sip = new Sip()
-
