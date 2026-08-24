@@ -33,7 +33,7 @@ class Ring extends EventEmitter {
     
     return this.ringApi.getCameras().then((cameras) => {
         if (!cameras.length) {
-          return reject(new Error('No cameras found in the location.'))
+          throw new Error('No cameras found in the location.')
         }
         
         for (let camera of cameras) {
